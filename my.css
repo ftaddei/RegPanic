@@ -99,4 +99,9 @@
 	font-weight: 700;
 	background-color: #F2081E;
 
+.centered {
+    margin: 0 auto;
+    text-align: left;
+    width: 800px;
+}
 }

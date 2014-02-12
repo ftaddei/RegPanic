@@ -1,4 +1,4 @@
 RegPanic
 ========
 
-RegAlert Panic PoC
+RegAlert Panic PoC - Proof of concept to call RegAlert panic webservices

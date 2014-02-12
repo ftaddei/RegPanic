@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title></title>
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+        <link rel="stylesheet" href="my.css" />
+        <style></style>
+		<script src="phonegap.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+		<script src=http://maps.googleapis.com/maps/api/js?sensor=true></script>
+        <script src="my.js"></script>
+		<script src="jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script>
+		<script src="jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>    
+		 <link rel="stylesheet" href="validationEngine.jquery.css" type="text/css"/>
+	</head>
+    <body>
+		
+        <div data-role="page" id="page1">
+            <div data-theme="a" data-role="header">
+                <h1>RegAlert Panic</h1>
+                <table width="100%" height="62" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="100%" height="51" align="center">
+                            <img src="images/Life9Small.jpg" height="51">
+                        </td>
+                    </tr>
+                </table>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li>
+                            <a href="#page1" data-theme="" data-icon="arrow-l" class="ui-btn-active ui-state-persist">
+                                Regalert
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#page2" data-theme="" data-icon="arrow-r">
+                                Location Info
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+				</div>
+				<div data-role="content" style="padding: 15px">
+					<div data-role="fieldcontain">
+						<fieldset data-role="controlgroup">
+							<label for="txtMobileNo">
+								Mobile Number
+							</label>
+							<input name="" id="txtMobileNo" placeholder="" value="" type="text" class="validate[required]"/>
+						</fieldset>
+					</div>
+					<input type="button" value="Send Panic" onclick="SendPanic();" />
+            </div>
+			<div id="resultDivContainer" class="dashboardStatNoRed" ></div>
+            <div data-theme="a" data-role="footer" data-position="fixed">
+                <h3>
+                    For any assistance please contact the <br>RegAlert Call Centre on 0861 911 000
+                </h3>
+            </div>
+        </div>
+        <div data-role="page" id="page2">
+            <div data-theme="a" data-role="header">
+                <h1>Agent Member Load</h1>
+                <table width="100%" height="62" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="100%" height="51" align="center">
+                            <img src="images/Life9Small.jpg" height="51">
+                        </td>
+                    </tr>
+                </table>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li>
+                            <a href="#page1" data-theme="" data-icon="arrow-l">
+                                Regalert
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#page2" data-theme="" data-icon="arrow-r" class="ui-btn-active ui-state-persist">
+                                Location Information
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+				</div>
+                <div data-role="collapsible-set" data-theme="" data-content-theme="">
+                    <div id="filterContainer" data-role="collapsible" data-collapsed="false">
+                        <h3>
+                            Coordinates
+                        </h3>
+						<span> Latitude : </span> <input type=text id=lat />
+						<span> Longitude : </span> <input type=text id=lng />
+						<input type="button" value="Display Map" onclick="ClickMap();" />
+                    </div>
+                    <div id="resultsContainer" data-role="collapsible" data-collapsed="true">
+                        <h3>
+                            Map
+                        </h3>
+						<div data-role="content" style="padding: 15px">
+						</div>
+                    </div>
+                </div>
+				
+            <div data-theme="a" data-role="footer" data-position="fixed">
+                <h3>
+                    For any assistance please contact the <br>RegAlert Call Centre on 0861 911 000
+                </h3>
+            </div>
+        </div>
+		<script>
+		//$(document).ready(function(){
+		//	$("#page1").validationEngine('attach');
+		//});
+
+		navigator.geolocation.getCurrentPosition (function (pos)
+		{
+		  var lat = pos.coords.latitude;
+		  var lng = pos.coords.longitude;
+		  $("#lat").val (lat);
+		  $("#lng").val (lng);
+		});
+
+		</script>		
+    <script type="text/javascript">
+
+	function ClickMap()
+		{
+			$('#resultsContainer').trigger('expand');
+			$('#filterContainer').trigger('collapse');
+		  var lat = $("#lat").val ();
+		  var lng = $("#lng").val ();
+		  var latlng = new google.maps.LatLng (lat, lng);
+		  var options = { 
+			zoom : 15, 
+			center : latlng, 
+			mapTypeId : google.maps.MapTypeId.ROADMAP 
+		  };
+		  var $content = $("#page2 div:jqmData(role=content)");
+		  $content.height (screen.height - 50);
+		  var map = new google.maps.Map ($content[0], options);
+		  $.mobile.changePage ($("#page2"));
+		  
+		  new google.maps.Marker ( 
+		  { 
+			map : map, 
+			animation : google.maps.Animation.DROP,
+			position : latlng  
+		  });  
+		}
+
+        function JSONTest() {
+            var resultDiv = $("#resultDivContainer");
+            var params = '{ AgentNo: ' + $('#txtAgentNo').val() + ', AgentId: ' + $('#txtAgentId').val() + ', MemberName: ' + $('#txtMemberName').val() + ', MemberSurname: ' + $('#txtMemberSurname').val() + ', MemberIDNo: ' + $('#txtMemberIDNo').val() + ', MemberCellNo: ' + $('#txtMemberCellNo').val() + ' }';
+
+            $.ajax({
+                //url: "http://localhost:7761/Life9MobiSite/Life9Webservice.asmx/HelloWorld",
+                url: "http://www.regsys.co.za/Life9MobiSite/Life9Webservice.asmx/HelloWorld",
+                type: "POST",
+                data: params, //'{AgentNo: "23462", AgentId: "23462", MemberName: "23462" , MemberSurname : "123", MemberIDNo : "123", MemberCellNo : "123"}', //'AgentNo=23462&AgentId=23462&MemberName=23462&MemberSurname=123&MemberIDNo=123&MemberCellNo=123',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(result) {
+                    for (prop in result) {
+                        resultDiv.html(result[prop])
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    resultDiv.html(thrownError);
+                }
+            });
+        };
+		
+		function SendPanic() {
+            var resultDiv = $("#resultDivContainer");
+			jQuery.support.cors = true;
+			
+			var lat = $("#lat").val();
+			var lng = $("#lng").val();
+			var mobileNo=$("#txtMobileNo").val();
+			
+			alert(mobileNo);
+			
+			var url="http://www.regsys.co.za/regtest/Panic.PanicRequest.cls" ;
+			
+			var data={};
+			data["soap_method"]="IncomingPanic";
+			data["username"]="FT";
+			data["pw"]="fab10999";
+			data["msisdn"]=mobileNo;
+			data["ID"]="121212";
+			data["lat"]=lat;
+			data["lng"]=lng;
+			data["rad"]="0";
+			data["datetime"]="2014-02-12 16:19:30";
+			data["companyId"]="3007";
+			
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: data, 
+				dataType: "html",
+				success: function(result) {
+						resultDiv.html(result)
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					resultDiv.html(thrownError.description);
+				}
+			});
+		
+        };
+    </script>
+    </body>
+</html>

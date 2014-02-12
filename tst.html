@@ -1,0 +1,59 @@
+<HTML>
+
+<head>
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+        <link rel="stylesheet" href="my.css" />
+        <style></style>
+		<script src="phonegap.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+</head>
+Results
+
+<div id="resultDivContainer" class="dashboardStatNoRed" ></div>
+<br>
+Test
+
+<input type="button" onClick="SendPanic();" value="Send">
+
+<script type="text/javascript">
+	function SendPanic() {
+		var resultDiv = $("#resultDivContainer");
+		
+		jQuery.support.cors = true;
+		var lat = $("#lat").val();
+		var lng = $("#lng").val();
+		var mobileNo$("#mobileNo").val();
+		
+		var url="http://www.regsys.co.za/regtest/Panic.PanicRequest.cls" ;
+		
+		var data={};
+		data["soap_method"]="IncomingPanic";
+		data["username"]="FT";
+		data["pw"]="fab10999";
+		data["msisdn"]="0832896516";
+		data["ID"]="121212";
+		data["lat"]="-26.121212";
+		data["lng"]="28.010101";
+		data["rad"]="0.6";
+		data["datetime"]="2014-02-12 16:19:30";
+		data["companyId"]="3007";
+		
+		$.ajax({
+			url: url,
+			type: "POST",
+			data: data, 
+			dataType: "html",
+			success: function(result) {
+					resultDiv.html(result)
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				resultDiv.html(thrownError.description);
+			}
+		});
+	}	;
+
+
+</script>
+
+</HTML>
